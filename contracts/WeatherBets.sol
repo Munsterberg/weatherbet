@@ -1,4 +1,4 @@
-pragma solidity ^0.5.11;
+pragma solidity ^0.5.8;
 
 contract WeatherBets {
    address public owner;
@@ -32,11 +32,9 @@ contract WeatherBets {
    }
 
    modifier endedBet(uint256 betId) {
-      require(betId < bets.length && !bets[betId].settled && bets[betId].taken && now > bets[betId].endTime, 'Error: bet has not ended');
       require (betId < bets.length, 'Invalid bet id');
-      require(bets[betId].endTime > now, 'Bet has not ended');
+      require(bets[betId].endTime < now, 'Bet has not ended');
       require(!bets[betId].settled, 'Bet has already been settled');
-      require(!bets[betId].taken, 'Bet has not been taken');
       _;
    }
 
@@ -50,7 +48,7 @@ contract WeatherBets {
 
    function placeBet(uint8 locationId, bool over, int8 temperature, uint256 endTime, uint8 odds) external payable {
       require(msg.value > 0, 'No bet amount sent');
-      require(endTime > now, 'Ent time must be in the future');
+      require(endTime > now, 'End time must be in the future');
       uint256 id;
       if (over == true) {
          id = bets.push(Bet(false, false, msg.sender, address(0), endTime, msg.value, msg.value * odds - msg.value, locationId, temperature));
@@ -74,16 +72,33 @@ contract WeatherBets {
       emit BetAccepted(msg.sender, betId);
    }
 
-   function cancelBet(uint256 betId) external untakenBet(betId) {
+   function cancelBet(uint256 betId) external payable untakenBet(betId) returns(uint256) {
       require(bets[betId].overAddress == msg.sender || bets[betId].underAddress == msg.sender);
-      bets[betId].settled = true;
+      Bet storage bet = bets[betId];
+      if (bet.overAddress == msg.sender) {
+              msg.sender.transfer(bet.overAmount);
+          } else {
+              msg.sender.transfer(bet.underAmount);
+          }
+      bet.settled = true;
       emit BetCancelled(msg.sender, betId);
    }
 
-   function payoutBet(uint256 betId) public endedBet(betId) {
+   function payoutBet(uint256 betId) external payable endedBet(betId) {
       require(bets[betId].overAddress == msg.sender || bets[betId].underAddress == msg.sender);
       Bet storage bet = bets[betId];
-      int8 temperature = getTemperature(bet.locationId, bet.endTime);
+      if (!bet.taken) {
+          uint256 amount;
+          if (bet.overAddress == msg.sender) {
+              amount = bet.overAmount;
+          } else {
+              amount = bet.underAmount;
+          }
+          bet.settled = true;
+          msg.sender.transfer(amount);
+          emit BetPayout(amount, betId);
+      } else {
+          int8 temperature = 20;
       if (temperature > bet.temperature) {
          bet.overAddress.transfer(bet.underAmount + bet.overAmount);
       } else if (temperature < bet.temperature) {
@@ -94,9 +109,12 @@ contract WeatherBets {
       }
       bet.settled = true;
       emit BetPayout(bet.overAmount + bet.underAmount, betId);
+      }
    }
 
    function getTemperature(uint8 locationId, uint256 time) private returns (int8) {
       return 20;
    }
+
+
 }
