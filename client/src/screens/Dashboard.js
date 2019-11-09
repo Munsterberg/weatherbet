@@ -3,6 +3,7 @@ import {Grid, Input, Button} from 'semantic-ui-react';
 import WeatherBetsContract from '../contracts/WeatherBets.json';
 import getWeb3 from '../utils/getWeb3';
 import BetTable from '../components/BetTable';
+import ExpandedBetTable from '../components/ExpandedBetTable';
 
 class Dashboard extends Component {
   state = {
@@ -107,6 +108,7 @@ class Dashboard extends Component {
             </Grid.Column>
           </Grid.Row>
         </Grid>
+        <ExpandedBetTable />
       </div>
     );
   }
