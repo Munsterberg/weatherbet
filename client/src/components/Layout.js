@@ -1,39 +1,34 @@
 import React from 'react';
-import { Menu, Sidebar, Segment } from 'semantic-ui-react';
+import {Menu, Sidebar, Segment, Icon} from 'semantic-ui-react';
 
 function Layout({children}) {
+  const [sidebarOpen, setSidebarOpen] = React.useState(false);
+
+  function toggleSidebar() {
+    setSidebarOpen(!sidebarOpen);
+  }
+
   return (
     <React.Fragment>
       <Menu>
-        <Menu.Item>
-          Logo
-        </Menu.Item>
+        <Menu.Item onClick={toggleSidebar}><Icon name="bars" /></Menu.Item>
       </Menu>
       <Sidebar.Pushable as={Segment}>
         <Sidebar
           as={Menu}
-          animation='push'
-          icon='labeled'
+          animation="push"
+          icon="labeled"
           inverted
           vertical
-          visible={true}
-          width='wide'
-        >
-          <Menu.Item as='a'>
-            Home
-          </Menu.Item>
-          <Menu.Item as='a'>
-            Games
-          </Menu.Item>
-          <Menu.Item as='a'>
-            Channels
-          </Menu.Item>
+          visible={sidebarOpen}
+          width="wide">
+          <Menu.Item as="a">City</Menu.Item>
+          <Menu.Item as="a">City</Menu.Item>
+          <Menu.Item as="a">City</Menu.Item>
         </Sidebar>
 
         <Sidebar.Pusher>
-          <Segment basic>
-            {children}
-          </Segment>
+          <Segment basic>{children}</Segment>
         </Sidebar.Pusher>
       </Sidebar.Pushable>
     </React.Fragment>
