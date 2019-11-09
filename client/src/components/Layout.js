@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import {Menu, Sidebar, Segment, Icon} from 'semantic-ui-react';
 
 function Layout({children}) {
@@ -11,7 +12,12 @@ function Layout({children}) {
   return (
     <React.Fragment>
       <Menu>
-        <Menu.Item onClick={toggleSidebar}><Icon name="bars" /></Menu.Item>
+        <Menu.Item onClick={toggleSidebar}>
+          <Icon name="bars" />
+        </Menu.Item>
+        <Menu.Item as={Link} to="activity">
+          <Icon name="user circle" />
+        </Menu.Item>
       </Menu>
       <Sidebar.Pushable as={Segment}>
         <Sidebar
