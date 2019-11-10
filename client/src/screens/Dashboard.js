@@ -1,10 +1,18 @@
 import React, {Component} from 'react';
-import {Table, Grid} from 'semantic-ui-react';
-import SimpleStorageContract from '../contracts/SimpleStorage.json';
+import {Grid, Input, Button} from 'semantic-ui-react';
+import WeatherBetsContract from '../contracts/WeatherBets.json';
 import getWeb3 from '../utils/getWeb3';
+import BetTable from '../components/BetTable';
+import ExpandedBetTable from '../components/ExpandedBetTable';
 
 class Dashboard extends Component {
-  state = {storageValue: 0, web3: null, accounts: null, contract: null};
+  state = {
+    storageValue: 0,
+    web3: null,
+    accounts: null,
+    contract: null,
+    locations: [],
+  };
 
   componentDidMount = async () => {
     try {
@@ -16,15 +24,15 @@ class Dashboard extends Component {
 
       // Get the contract instance.
       const networkId = await web3.eth.net.getId();
-      const deployedNetwork = SimpleStorageContract.networks[networkId];
+      const deployedNetwork = WeatherBetsContract.networks[networkId];
       const instance = new web3.eth.Contract(
-        SimpleStorageContract.abi,
+        WeatherBetsContract.abi,
         deployedNetwork && deployedNetwork.address,
       );
 
       // Set web3, accounts, and contract to the state, and then proceed with an
       // example of interacting with the contract's methods.
-      this.setState({web3, accounts, contract: instance});
+      this.setState({web3, accounts, contract: instance}, this.fetchData);
     } catch (error) {
       // Catch any errors for any of the above operations.
       alert(
@@ -33,7 +41,26 @@ class Dashboard extends Component {
       console.error(error);
     }
   };
-  //
+
+  fetchData = () => {
+    // const {contract} = this.state;
+    // const locations = contract.methods.locations.call();
+    // this.setState({locations});
+  };
+
+  handleChange = e => {
+    this.setState({[e.target.name]: e.target.value});
+  };
+
+  submit = e => {
+    e.preventDefault();
+    const {contract, address} = this.state;
+    if (e.target.name === 'over') {
+      // contract.methods.placeBet.call(locationId, true, temp, timestamp, odds);
+    }
+    // contract.methods.placeBet.call(locationId, false, temp, timestamp, odds);
+  };
+
   // runExample = async () => {
   //   const { accounts, contract } = this.state;
   //
@@ -57,64 +84,31 @@ class Dashboard extends Component {
         <Grid columns={2} divided>
           <Grid.Row>
             <Grid.Column>
-              <Table>
-                <Table.Header>
-                  <Table.Row>
-                    <Table.HeaderCell>Tempature</Table.HeaderCell>
-                    <Table.HeaderCell>Size</Table.HeaderCell>
-                    <Table.HeaderCell>Odds</Table.HeaderCell>
-                  </Table.Row>
-                </Table.Header>
-                <Table.Body>
-                  <Table.Row>
-                    <Table.Cell>Cell</Table.Cell>
-                    <Table.Cell>Cell</Table.Cell>
-                    <Table.Cell>Cell</Table.Cell>
-                  </Table.Row>
-                  <Table.Row>
-                    <Table.Cell>Cell</Table.Cell>
-                    <Table.Cell>Cell</Table.Cell>
-                    <Table.Cell>Cell</Table.Cell>
-                  </Table.Row>
-                  <Table.Row>
-                    <Table.Cell>Cell</Table.Cell>
-                    <Table.Cell>Cell</Table.Cell>
-                    <Table.Cell>Cell</Table.Cell>
-                  </Table.Row>
-                </Table.Body>
-              </Table>
+              <BetTable />
+              <form onSubmit={this.submit} name="over">
+                <Input
+                  onChange={this.handleChange}
+                  placeholder="Bet Amount ($)"
+                  name="over"
+                />
+                <Button type="submit">Bet Over</Button>
+              </form>
             </Grid.Column>
 
             <Grid.Column>
-              <Table>
-                <Table.Header>
-                  <Table.Row>
-                    <Table.HeaderCell>Tempature</Table.HeaderCell>
-                    <Table.HeaderCell>Size</Table.HeaderCell>
-                    <Table.HeaderCell>Odds</Table.HeaderCell>
-                  </Table.Row>
-                </Table.Header>
-                <Table.Body>
-                  <Table.Row>
-                    <Table.Cell>Cell</Table.Cell>
-                    <Table.Cell>Cell</Table.Cell>
-                    <Table.Cell>Cell</Table.Cell>
-                  </Table.Row>
-                  <Table.Row>
-                    <Table.Cell>Cell</Table.Cell>
-                    <Table.Cell>Cell</Table.Cell>
-                    <Table.Cell>Cell</Table.Cell>
-                  </Table.Row>
-                  <Table.Row>
-                    <Table.Cell>Cell</Table.Cell>
-                    <Table.Cell>Cell</Table.Cell>
-                    <Table.Cell>Cell</Table.Cell>
-                  </Table.Row>
-                </Table.Body>
-              </Table>
+              <BetTable />
+              <form onSubmit={this.submit} name="under">
+                <Input
+                  onChange={this.handleChange}
+                  placeholder="Bet Amount ($)"
+                  name="under"
+                />
+                <Button type="submit">Bet Under</Button>
+              </form>
             </Grid.Column>
           </Grid.Row>
         </Grid>
+        <ExpandedBetTable />
       </div>
     );
   }
