@@ -1,12 +1,3 @@
-<<<<<<< HEAD
-pragma solidity ^0.5.11;
-
-contract WeatherBets {
-   address public owner;
-   string[] public locations = ['Vancouver', 'Toronto'];
-   Bet[] public bets;
-   mapping (uint => address) betToAddress;
-=======
 pragma solidity ^0.4.24;
 
 import "chainlink/contracts/ChainlinkClient.sol";
@@ -19,18 +10,12 @@ contract WeatherBets is ChainlinkClient {
    mapping (uint => int8) timeToTemp;
    mapping (uint => bool) timeToTempFetched;
    uint public currentEndTime;
->>>>>>> contracts
 
    struct Bet {
       bool taken;
       bool settled;
-<<<<<<< HEAD
-      address payable overAddress;
-      address payable underAddress;
-=======
       address overAddress;
       address underAddress;
->>>>>>> contracts
       uint256 endTime;
       uint256 overAmount;
       uint256 underAmount;
@@ -52,20 +37,6 @@ contract WeatherBets is ChainlinkClient {
    }
 
    modifier endedBet(uint256 betId) {
-<<<<<<< HEAD
-      require(betId < bets.length && !bets[betId].settled && bets[betId].taken && now > bets[betId].endTime, 'Error: bet has not ended');
-      require (betId < bets.length, 'Invalid bet id');
-      require(bets[betId].endTime > now, 'Bet has not ended');
-      require(!bets[betId].settled, 'Bet has already been settled');
-      require(!bets[betId].taken, 'Bet has not been taken');
-      _;
-   }
-
-   constructor() public {
-      owner = msg.sender;
-   }
-
-=======
       require (betId < bets.length, 'Invalid bet id');
       require(bets[betId].endTime < now, 'Bet has not ended');
       require(!bets[betId].settled, 'Bet has already been settled');
@@ -83,28 +54,19 @@ contract WeatherBets is ChainlinkClient {
       setChainlinkOracle(0xc99B3D447826532722E41bc36e644ba3479E4365);
   }
 
->>>>>>> contracts
    function() external payable {
       revert();
    }
 
    function placeBet(uint8 locationId, bool over, int8 temperature, uint256 endTime, uint8 odds) external payable {
       require(msg.value > 0, 'No bet amount sent');
-<<<<<<< HEAD
-      require(endTime > now, 'Ent time must be in the future');
-=======
       require(endTime > now, 'End time must be in the future');
->>>>>>> contracts
       uint256 id;
       if (over == true) {
          id = bets.push(Bet(false, false, msg.sender, address(0), endTime, msg.value, msg.value * odds - msg.value, locationId, temperature));
       } else {
          id = bets.push(Bet(false, false, address(0), msg.sender, endTime, msg.value * odds - msg.value, msg.value, locationId, temperature));
       }
-<<<<<<< HEAD
-      betToAddress[id] = msg.sender;
-=======
->>>>>>> contracts
       emit NewBet(msg.sender, id);
    }
 
@@ -121,18 +83,6 @@ contract WeatherBets is ChainlinkClient {
       emit BetAccepted(msg.sender, betId);
    }
 
-<<<<<<< HEAD
-   function cancelBet(uint256 betId) external untakenBet(betId) {
-      require(bets[betId].overAddress == msg.sender || bets[betId].underAddress == msg.sender);
-      bets[betId].settled = true;
-      emit BetCancelled(msg.sender, betId);
-   }
-
-   function payoutBet(uint256 betId) public endedBet(betId) {
-      require(bets[betId].overAddress == msg.sender || bets[betId].underAddress == msg.sender);
-      Bet storage bet = bets[betId];
-      int8 temperature = getTemperature(bet.locationId, bet.endTime);
-=======
    function cancelBet(uint256 betId) external payable untakenBet(betId) returns(uint256) {
       require(bets[betId].overAddress == msg.sender || bets[betId].underAddress == msg.sender);
       Bet storage bet = bets[betId];
@@ -161,7 +111,6 @@ contract WeatherBets is ChainlinkClient {
       } else {
          require(timeToTempFetched[bet.endTime], 'Temperature data not yet confirmed');
           int temperature = timeToTemp[bet.endTime];
->>>>>>> contracts
       if (temperature > bet.temperature) {
          bet.overAddress.transfer(bet.underAmount + bet.overAmount);
       } else if (temperature < bet.temperature) {
@@ -172,13 +121,6 @@ contract WeatherBets is ChainlinkClient {
       }
       bet.settled = true;
       emit BetPayout(bet.overAmount + bet.underAmount, betId);
-<<<<<<< HEAD
-   }
-
-   function getTemperature(uint8 locationId, uint256 time) private returns (int8) {
-      return 20;
-   }
-=======
       }
    }
 
@@ -218,5 +160,4 @@ contract WeatherBets is ChainlinkClient {
     LinkTokenInterface link = LinkTokenInterface(chainlinkTokenAddress());
     require(link.transfer(msg.sender, link.balanceOf(address(this))), "Unable to transfer");
   }
->>>>>>> contracts
 }
