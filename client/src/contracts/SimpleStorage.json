@@ -5,7 +5,10 @@
       "constant": false,
       "inputs": [
         {
+<<<<<<< HEAD
           "internalType": "uint256",
+=======
+>>>>>>> contracts
           "name": "x",
           "type": "uint256"
         }
@@ -22,7 +25,10 @@
       "name": "get",
       "outputs": [
         {
+<<<<<<< HEAD
           "internalType": "uint256",
+=======
+>>>>>>> contracts
           "name": "",
           "type": "uint256"
         }
@@ -32,6 +38,7 @@
       "type": "function"
     }
   ],
+<<<<<<< HEAD
   "metadata": "{\"compiler\":{\"version\":\"0.5.12+commit.7709ece9\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"constant\":true,\"inputs\":[],\"name\":\"get\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"x\",\"type\":\"uint256\"}],\"name\":\"set\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/Users/munsterberg/code/playground/hackathon/weatherbet/contracts/SimpleStorage.sol\":\"SimpleStorage\"},\"evmVersion\":\"petersburg\",\"libraries\":{},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/Users/munsterberg/code/playground/hackathon/weatherbet/contracts/SimpleStorage.sol\":{\"keccak256\":\"0x27a650f3e92e6057b3f1239be6fc335fb57d75c570d7274d8902eb0b04e48014\",\"urls\":[\"bzz-raw://5921ad02b314eeb6ba35cc059023a56d28a8aa9133076210b9df43f54824308d\",\"dweb:/ipfs/QmZFS95cqTQQE5XP11DAxkYYaeiQPSSfquyhhc2Df3v36J\"]}},\"version\":1}",
   "bytecode": "0x608060405234801561001057600080fd5b5060c68061001f6000396000f3fe6080604052348015600f57600080fd5b506004361060325760003560e01c806360fe47b11460375780636d4ce63c146062575b600080fd5b606060048036036020811015604b57600080fd5b8101908080359060200190929190505050607e565b005b60686088565b6040518082815260200191505060405180910390f35b8060008190555050565b6000805490509056fea265627a7a72315820bb99358509229dc868d23b0e57b29ea559f32b6004e56e99010fc85ca92595f164736f6c634300050c0032",
   "deployedBytecode": "0x6080604052348015600f57600080fd5b506004361060325760003560e01c806360fe47b11460375780636d4ce63c146062575b600080fd5b606060048036036020811015604b57600080fd5b8101908080359060200190929190505050607e565b005b60686088565b6040518082815260200191505060405180910390f35b8060008190555050565b6000805490509056fea265627a7a72315820bb99358509229dc868d23b0e57b29ea559f32b6004e56e99010fc85ca92595f164736f6c634300050c0032",
@@ -41,6 +48,17 @@
   "sourcePath": "/Users/munsterberg/code/playground/hackathon/weatherbet/contracts/SimpleStorage.sol",
   "ast": {
     "absolutePath": "/Users/munsterberg/code/playground/hackathon/weatherbet/contracts/SimpleStorage.sol",
+=======
+  "metadata": "{\"compiler\":{\"version\":\"0.5.8+commit.23d335f2\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"constant\":false,\"inputs\":[{\"name\":\"x\",\"type\":\"uint256\"}],\"name\":\"set\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"get\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/home/christian/ethWaterloo/weatherbet/contracts/SimpleStorage.sol\":\"SimpleStorage\"},\"evmVersion\":\"petersburg\",\"libraries\":{},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/home/christian/ethWaterloo/weatherbet/contracts/SimpleStorage.sol\":{\"keccak256\":\"0x27a650f3e92e6057b3f1239be6fc335fb57d75c570d7274d8902eb0b04e48014\",\"urls\":[\"bzzr://72f63578772843cf2f8ae2bce4a69c027cbfe7f3e04cc4af14ca023bdc3c35c2\"]}},\"version\":1}",
+  "bytecode": "0x608060405234801561001057600080fd5b5060bd8061001f6000396000f3fe6080604052348015600f57600080fd5b506004361060325760003560e01c806360fe47b11460375780636d4ce63c146062575b600080fd5b606060048036036020811015604b57600080fd5b8101908080359060200190929190505050607e565b005b60686088565b6040518082815260200191505060405180910390f35b8060008190555050565b6000805490509056fea165627a7a72305820bd5b67100454d17684944ba811ab913ccd84b56981ae206a5e48e494973051d80029",
+  "deployedBytecode": "0x6080604052348015600f57600080fd5b506004361060325760003560e01c806360fe47b11460375780636d4ce63c146062575b600080fd5b606060048036036020811015604b57600080fd5b8101908080359060200190929190505050607e565b005b60686088565b6040518082815260200191505060405180910390f35b8060008190555050565b6000805490509056fea165627a7a72305820bd5b67100454d17684944ba811ab913ccd84b56981ae206a5e48e494973051d80029",
+  "sourceMap": "25:176:1:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;25:176:1;;;;;;;",
+  "deployedSourceMap": "25:176:1:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;25:176:1;;;;;;;;;;;;;;;;;;;;;;;;72:53;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;72:53:1;;;;;;;;;;;;;;;;;:::i;:::-;;129:70;;;:::i;:::-;;;;;;;;;;;;;;;;;;;72:53;119:1;106:10;:14;;;;72:53;:::o;129:70::-;165:4;184:10;;177:17;;129:70;:::o",
+  "source": "pragma solidity ^0.5.0;\n\ncontract SimpleStorage {\n  uint storedData;\n\n  function set(uint x) public {\n    storedData = x;\n  }\n\n  function get() public view returns (uint) {\n    return storedData;\n  }\n}\n",
+  "sourcePath": "/home/christian/ethWaterloo/weatherbet/contracts/SimpleStorage.sol",
+  "ast": {
+    "absolutePath": "/home/christian/ethWaterloo/weatherbet/contracts/SimpleStorage.sol",
+>>>>>>> contracts
     "exportedSymbols": {
       "SimpleStorage": [
         79
@@ -292,7 +310,11 @@
     "src": "0:202:1"
   },
   "legacyAST": {
+<<<<<<< HEAD
     "absolutePath": "/Users/munsterberg/code/playground/hackathon/weatherbet/contracts/SimpleStorage.sol",
+=======
+    "absolutePath": "/home/christian/ethWaterloo/weatherbet/contracts/SimpleStorage.sol",
+>>>>>>> contracts
     "exportedSymbols": {
       "SimpleStorage": [
         79
@@ -545,12 +567,17 @@
   },
   "compiler": {
     "name": "solc",
+<<<<<<< HEAD
     "version": "0.5.12+commit.7709ece9.Emscripten.clang"
+=======
+    "version": "0.5.8+commit.23d335f2.Emscripten.clang"
+>>>>>>> contracts
   },
   "networks": {
     "5777": {
       "events": {},
       "links": {},
+<<<<<<< HEAD
       "address": "0x70dd06bbfd59Bfa67EaCA81EcE6763B341Ecc7da",
       "transactionHash": "0xdcc2d8f3273ec21108680920686d4780d74e9bd897318d37fcd82f8b2961a40f"
     }
@@ -558,6 +585,14 @@
   "schemaVersion": "3.0.18",
   "updatedAt": "2019-11-09T18:05:10.770Z",
   "networkType": "ethereum",
+=======
+      "address": "0xF6624142B35143CA34F1C77E3AcF0C0fE5323cac",
+      "transactionHash": "0x54b463dd695739ef09fbc1589fd6771001a116902640916a0683b59ed31b91d1"
+    }
+  },
+  "schemaVersion": "3.0.16",
+  "updatedAt": "2019-11-09T20:33:12.063Z",
+>>>>>>> contracts
   "devdoc": {
     "methods": {}
   },
