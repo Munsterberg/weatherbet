@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import SimpleStorageContract from "./contracts/SimpleStorage.json";
 import WeatherBetsContract from "./contracts/WeatherBets.json";
 import getWeb3 from "./utils/getWeb3";
 
@@ -88,6 +87,3 @@ class App extends Component {
 }
 
 export default App;
-
-cancelBet;
-placeBet;

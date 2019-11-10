@@ -1,16 +1,21 @@
-pragma solidity ^0.5.8;
+pragma solidity ^0.4.24;
 
-contract WeatherBets {
+import "chainlink/contracts/ChainlinkClient.sol";
+
+contract WeatherBets is ChainlinkClient {
    address public owner;
    string[] public locations = ['Vancouver', 'Toronto'];
+   string[] private coords = ['49.2827,-123.1207', '43.6532,-79.3831'];
    Bet[] public bets;
-   mapping (uint => address) betToAddress;
+   mapping (uint => int8) timeToTemp;
+   mapping (uint => bool) timeToTempFetched;
+   uint public currentEndTime;
 
    struct Bet {
       bool taken;
       bool settled;
-      address payable overAddress;
-      address payable underAddress;
+      address overAddress;
+      address underAddress;
       uint256 endTime;
       uint256 overAmount;
       uint256 underAmount;
@@ -38,9 +43,16 @@ contract WeatherBets {
       _;
    }
 
-   constructor() public {
-      owner = msg.sender;
+   modifier onlyOwner() {
+     require(msg.sender == owner);
+     _;
    }
+
+   constructor() {
+      owner = msg.sender;
+      setChainlinkToken(0x20fE562d797A42Dcb3399062AE9546cd06f6328);
+      setChainlinkOracle(0xc99B3D447826532722E41bc36e644ba3479E4365);
+  }
 
    function() external payable {
       revert();
@@ -55,7 +67,6 @@ contract WeatherBets {
       } else {
          id = bets.push(Bet(false, false, address(0), msg.sender, endTime, msg.value * odds - msg.value, msg.value, locationId, temperature));
       }
-      betToAddress[id] = msg.sender;
       emit NewBet(msg.sender, id);
    }
 
@@ -98,7 +109,8 @@ contract WeatherBets {
           msg.sender.transfer(amount);
           emit BetPayout(amount, betId);
       } else {
-          int8 temperature = 20;
+         require(timeToTempFetched[bet.endTime], 'Temperature data not yet confirmed');
+          int temperature = timeToTemp[bet.endTime];
       if (temperature > bet.temperature) {
          bet.overAddress.transfer(bet.underAmount + bet.overAmount);
       } else if (temperature < bet.temperature) {
@@ -112,9 +124,40 @@ contract WeatherBets {
       }
    }
 
-   function getTemperature(uint8 locationId, uint256 time) private returns (int8) {
-      return 20;
-   }
+   // Creates a Chainlink request with the uint256 multiplier job
+  function requestTemperature(address _oracle, bytes32 _jobId, uint256 _payment, uint8 locationId)
+    public
+  {
+     require(now > currentEndTime, 'Betting period has not ended yet');
+    // newRequest takes a JobID, a callback address, and callback function as input
+    Chainlink.Request memory req = buildChainlinkRequest(_jobId, this, this.fulfill.selector);
+    // Adds a URL with the key "get" to the request parameters
+    req.add("get", string(abi.encodePacked("https://api.darksky.net/forecast/a7af029cf133f569356fafbb04c2c438/", coords[locationId] , ",", currentEndTime)));
+    // Uses input param (dot-delimited string) as the "path" in the request parameters
+    req.add("path", "current.temperature");
+    // Adds an integer with the key "times" to the request parameters
+    //req.addInt("times", 100);
+    // Sends the request with the amount of payment specified to the oracle
+    sendChainlinkRequestTo(_oracle, req, _payment);
+  }
 
+  // fulfill receives a uint256 data type
+  function fulfill(bytes32 _requestId, int256 _temperature)
+    public
+    // Use recordChainlinkFulfillment to ensure only the requesting oracle can fulfill
+    recordChainlinkFulfillment(_requestId)
+  {
+    timeToTemp[currentEndTime] = int8(_temperature);
+    timeToTempFetched[currentEndTime] = true;
+    currentEndTime += 3 days;
+  }
 
+  // withdrawLink allows the owner to withdraw any extra LINK on the contract
+  function withdrawLink()
+    public
+    onlyOwner
+  {
+    LinkTokenInterface link = LinkTokenInterface(chainlinkTokenAddress());
+    require(link.transfer(msg.sender, link.balanceOf(address(this))), "Unable to transfer");
+  }
 }
